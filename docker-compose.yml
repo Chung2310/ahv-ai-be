@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  app:
+    image: node:20-alpine
+    container_name: ahv-ai-cms-dev
+    working_dir: /app
+    volumes:
+      # Mount toàn bộ source code vào container
+      - ./:/app
+      # Ẩn node_modules của máy host để container dùng node_modules riêng của Linux (tránh lỗi native binary)
+      - /app/node_modules
+    ports:
+      - "${PORT:-5005}:${PORT:-5005}"
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=development
+      - REDIS_HOST=redis
+    # Khi chạy container, tự động cài dependencies và chạy nodemon (yarn dev)
+    command: sh -c "yarn install && yarn dev"
+    networks:
+      - dev_internal_net
+
+  redis:
+    image: redis:7-alpine
+    container_name: ahv-ai-redis
+    networks:
+      - dev_internal_net
+
+  mongodb:
+    image: mongo:latest
+    container_name: ahv-ai-mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - dev_internal_net
+
+networks:
+  dev_internal_net:
+    external: true
+
+volumes:
+  mongodb_data:
