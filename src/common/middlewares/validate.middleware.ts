@@ -28,7 +28,7 @@ export const validate = (schema: object) => (req: Request, res: Response, next: 
 
 export const objectId = (value: string, helpers: Joi.CustomHelpers) => {
     if (!value.match(/^[0-9a-fA-F]{24}$/)) {
-        return helpers.message({ custom: 'ID không hợp lệ' } as any);
+        return helpers.message({ custom: 'ID không hợp lệ' });
     }
     return value;
 };

@@ -158,6 +158,8 @@
  *               type: object
  *         error:
  *           type: string
+ *         price:
+ *           type: string
  *         createdAt:
  *           type: string
  *           format: date-time

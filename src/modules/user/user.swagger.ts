@@ -109,7 +109,7 @@
  *     responses:
  *       "200":
  *         description: OK
- *   patch:
+ *   put:
  *     summary: Cập nhật người dùng (SuperAdmin)
  *     tags: [Users]
  *     security:

@@ -11,6 +11,7 @@ export const createPost = {
     body: Joi.object().keys({
         title: Joi.string().required().messages({ 'any.required': 'Tiêu đề là bắt buộc' }),
         content: Joi.string().required().messages({ 'any.required': 'Nội dung là bắt buộc' }),
+        image: Joi.string().allow('').optional(),
         categoryId: Joi.string().required().custom(objectId).messages({ 'any.required': 'Danh mục là bắt buộc' }),
         status: Joi.string().valid('draft', 'published'),
     }),
@@ -38,6 +39,7 @@ export const updatePost = {
     body: Joi.object().keys({
         title: Joi.string(),
         content: Joi.string(),
+        image: Joi.string().allow('').optional(),
         categoryId: Joi.string().custom(objectId),
         status: Joi.string().valid('draft', 'published'),
     }).min(1),

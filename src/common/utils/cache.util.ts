@@ -1,7 +1,7 @@
 import redis from '../config/redis';
 import logger from '../config/logger';
 
-export const setCache = async (key: string, value: any, ttlSeconds = 3600) => {
+export const setCache = async (key: string, value: unknown, ttlSeconds = 3600) => {
     try {
         await redis.set(key, JSON.stringify(value), 'EX', ttlSeconds);
     } catch (error) {

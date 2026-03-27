@@ -2,6 +2,7 @@ import { IAiModel } from './aimodel.interface';
 import AiModel from './aimodel.model';
 import { ApiError } from '../../common/utils/ApiError';
 import * as cacheUtil from '../../common/utils/cache.util';
+import { IPaginatedResult } from '../../common/interfaces/pagination.interface';
 
 export const createAiModel = async (body: Partial<IAiModel>): Promise<IAiModel> => {
     const aiModel = await AiModel.create(body);
@@ -9,12 +10,15 @@ export const createAiModel = async (body: Partial<IAiModel>): Promise<IAiModel> 
     return aiModel;
 };
 
-export const getAiModels = async (filter: Record<string, unknown>, options: { limit?: number; page?: number; sortBy?: string }) => {
+export const getAiModels = async (
+    filter: Record<string, unknown>,
+    options: { limit?: number; page?: number; sortBy?: string },
+): Promise<IPaginatedResult<IAiModel>> => {
     const { limit = 10, page = 1, sortBy = 'createdAt:desc' } = options;
     const skip = (page - 1) * limit;
 
     const cacheKey = `aimodels_list_${JSON.stringify(filter)}_${limit}_${page}_${sortBy}`;
-    const cachedData = await cacheUtil.getCache<any>(cacheKey);
+    const cachedData = await cacheUtil.getCache<IPaginatedResult<IAiModel>>(cacheKey);
     if (cachedData) return cachedData;
 
     const [items, totalItems] = await Promise.all([

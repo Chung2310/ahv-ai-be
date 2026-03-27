@@ -8,7 +8,7 @@ import * as userService from './user.service';
 // Auth controllers  đã chuyển sang src/modules/auth/auth.controller.ts
 
 export const getUsers = catchAsync(async (req: IRequest, res: Response) => {
-    const filter: Record<string, any> = {};
+    const filter: Record<string, unknown> = {};
     if (req.query.role) filter.role = req.query.role;
     
     const options = {

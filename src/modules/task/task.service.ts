@@ -20,6 +20,7 @@ export const createTask = async (userId: string, aiModelId: string, payload: unk
         aiModel: aiModel._id,
         payload,
         status: 'pending',
+        price: aiModel.price || '0',
     });
 
     // 3. Đưa job vào hàng đợi BullMQ
@@ -63,7 +64,7 @@ export const getTasksByUser = async (userId: string, filter: Record<string, unkn
     const query = { user: userId, ...filter };
 
     const [tasks, totalItems] = await Promise.all([
-        Task.find(query).sort({ createdAt: -1 }).skip(skip).limit(limit).populate('aiModel', 'name provider version'),
+        Task.find(query).sort({ createdAt: -1 }).skip(skip).limit(limit).populate('aiModel', 'name provider'),
         Task.countDocuments(query)
     ]);
 
@@ -80,7 +81,7 @@ export const getTasksByUser = async (userId: string, filter: Record<string, unkn
 };
 
 export const getTaskById = async (taskId: string, userId: string) => {
-    const task = await Task.findOne({ _id: taskId, user: userId }).populate('aiModel', 'name provider version');
+    const task = await Task.findOne({ _id: taskId, user: userId }).populate('aiModel', 'name provider');
     if (!task) {
         throw new ApiError(404, 'Task không tồn tại hoặc không thuộc quyền truy cập');
     }
