@@ -2,6 +2,7 @@ import { ICategory } from './category.interface';
 import Category from './category.model';
 import { ApiError } from '../../common/utils/ApiError';
 import * as cacheUtil from '../../common/utils/cache.util';
+import { IPaginatedResult } from '../../common/interfaces/pagination.interface';
 
 export const createCategory = async (body: Partial<ICategory>): Promise<ICategory> => {
     const category = await Category.create(body);
@@ -9,13 +10,16 @@ export const createCategory = async (body: Partial<ICategory>): Promise<ICategor
     return category;
 };
 
-export const getCategories = async (filter: Record<string, unknown>, options: { limit?: number; page?: number; sortBy?: string }) => {
+export const getCategories = async (
+    filter: Record<string, unknown>,
+    options: { limit?: number; page?: number; sortBy?: string },
+): Promise<IPaginatedResult<ICategory>> => {
     const { limit = 10, page = 1, sortBy = 'createdAt:desc' } = options;
     const skip = (page - 1) * limit;
 
     // Cache key dựa trên filter và options (đơn giản hóa bằng stringify)
     const cacheKey = `categories_list_${JSON.stringify(filter)}_${limit}_${page}_${sortBy}`;
-    const cachedData = await cacheUtil.getCache<any>(cacheKey);
+    const cachedData = await cacheUtil.getCache<IPaginatedResult<ICategory>>(cacheKey);
     if (cachedData) return cachedData;
 
     const [items, totalItems] = await Promise.all([

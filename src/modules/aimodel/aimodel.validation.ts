@@ -3,10 +3,12 @@ import Joi from 'joi';
 export const createAiModel = {
     body: Joi.object().keys({
         name: Joi.string().required(),
-        version: Joi.string().required(),
         provider: Joi.string().required(),
         description: Joi.string(),
         isActive: Joi.boolean(),
+        price: Joi.string(),
+        payload: Joi.string(),
+        image: Joi.string(),
     }),
 };
 
@@ -29,10 +31,12 @@ export const updateAiModel = {
     }),
     body: Joi.object().keys({
         name: Joi.string(),
-        version: Joi.string(),
         provider: Joi.string(),
         description: Joi.string(),
         isActive: Joi.boolean(),
+        price: Joi.string(),
+        payload: Joi.string(),
+        image: Joi.string(),
     }).min(1),
 };
 

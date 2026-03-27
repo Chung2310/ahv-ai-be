@@ -44,6 +44,8 @@
  *                 type: string
  *               content:
  *                 type: string
+ *               image:
+ *                 type: string
  *               category:
  *                 type: string
  *               status:

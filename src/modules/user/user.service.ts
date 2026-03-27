@@ -25,7 +25,7 @@ export const loginUserWithEmailAndPassword = async (email: string, password: str
     return user;
 };
 
-export const queryUsers = async (filter: Record<string, any>, options: { limit?: number; page?: number; sortBy?: string }) => {
+export const queryUsers = async (filter: Record<string, unknown>, options: { limit?: number; page?: number; sortBy?: string }) => {
     const { limit = 10, page = 1, sortBy = 'createdAt:desc' } = options;
     const skip = (page - 1) * limit;
 

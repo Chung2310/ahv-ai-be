@@ -22,6 +22,7 @@ const envVarsSchema = Joi.object()
         WEBHOOK_BASE_URL: Joi.string().required().description('Base URL for Webhook callbacks (e.g., https://my-domain.com)'),
         REDIS_HOST: Joi.string().default('localhost').description('Redis host for BullMQ'),
         REDIS_PORT: Joi.number().default(6379).description('Redis port'),
+        INITIAL_WALLET_BALANCE: Joi.number().default(0).description('Initial balance for new users'),
     })
     .unknown();
 
@@ -62,4 +63,5 @@ export default {
         host: envVars.REDIS_HOST,
         port: envVars.REDIS_PORT,
     },
+    initialWalletBalance: envVars.INITIAL_WALLET_BALANCE,
 };

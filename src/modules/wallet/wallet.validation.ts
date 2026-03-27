@@ -8,3 +8,12 @@ export const updateBalance = {
         amount: Joi.number().required(),
     }),
 };
+
+export const getWallets = {
+    query: Joi.object().keys({
+        user: Joi.string().regex(/^[0-9a-fA-F]{24}$/),
+        sortBy: Joi.string(),
+        limit: Joi.number().integer(),
+        page: Joi.number().integer(),
+    }),
+};

@@ -2,6 +2,8 @@ import mongoose from 'mongoose';
 import Wallet from './wallet.model';
 import WalletHistory from './walletHistory.model';
 import { ApiError } from '../../common/utils/ApiError';
+import { IPaginatedResult } from '../../common/interfaces/pagination.interface';
+import { IWallet } from './wallet.interface';
 
 export const createWallet = async (body: { user: string; balance?: number; currency?: string }) => {
     return Wallet.create(body);
@@ -40,7 +42,7 @@ export const updateBalance = async (userId: string, amount: number, description?
         
     // Ghi log lịch sử
     await WalletHistory.create({
-        user: userObjectId as any,
+        user: userObjectId,
         type: amount > 0 ? 'deposit' : 'withdraw',
         amount: Math.abs(amount),
         balanceBefore,
@@ -53,7 +55,7 @@ export const updateBalance = async (userId: string, amount: number, description?
 
     // Ghi log lịch sử
     await WalletHistory.create({
-        user: userObjectId as any,
+        user: userObjectId,
         type: amount > 0 ? 'deposit' : 'withdraw',
         amount: Math.abs(amount),
         balanceBefore,
@@ -62,4 +64,24 @@ export const updateBalance = async (userId: string, amount: number, description?
     });
 
     return updatedWallet;
+};
+
+export const queryWallets = async (
+    filter: Record<string, unknown>,
+    options: { limit?: number; page?: number; sortBy?: string },
+): Promise<IPaginatedResult<IWallet>> => {
+    const { limit = 10, page = 1, sortBy = 'createdAt:desc' } = options;
+    const skip = (page - 1) * limit;
+
+    const [items, totalItems] = await Promise.all([
+        Wallet.find(filter).sort(sortBy).skip(skip).limit(limit).populate('user', 'name email'),
+        Wallet.countDocuments(filter),
+    ]);
+
+    return {
+        items,
+        totalItems,
+        totalPages: Math.ceil(totalItems / limit),
+        currentPage: page,
+    };
 };

@@ -12,6 +12,7 @@ export interface ITask {
         meta?: Record<string, unknown>;
     };
     error?: string;
+    price: string;
 }
 
 export interface ITaskDoc extends ITask, Document {}

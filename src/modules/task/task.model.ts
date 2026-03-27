@@ -37,6 +37,10 @@ const taskSchema = new mongoose.Schema<ITaskDoc, ITaskModel>(
         error: {
             type: String,
         },
+        price: {
+            type: String,
+            default: '0',
+        },
     },
     {
         timestamps: true,

@@ -27,16 +27,19 @@
  *             type: object
  *             required:
  *               - name
- *               - version
  *               - provider
  *             properties:
  *               name:
  *                 type: string
- *               version:
- *                 type: string
  *               provider:
  *                 type: string
  *               description:
+ *                 type: string
+ *               price:
+ *                 type: string
+ *               payload:
+ *                 type: string
+ *               image:
  *                 type: string
  *     responses:
  *       "201":

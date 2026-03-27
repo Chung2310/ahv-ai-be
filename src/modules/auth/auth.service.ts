@@ -3,12 +3,21 @@ import * as tokenService from '../user/token.service';
 import { verifyToken } from '../user/token.service';
 import { ApiError } from '../../common/utils/ApiError';
 import { IUser } from '../user/user.interface';
+import * as walletService from '../wallet/wallet.service';
+import config from '../../common/config/config';
 
 /**
  * Đăng ký tài khoản mới — trả về user và tokens
  */
 export const register = async (body: Partial<IUser>) => {
     const user = await createUser(body);
+    
+    // Tự động tạo ví cho người dùng mới
+    await walletService.createWallet({
+        user: user.id,
+        balance: config.initialWalletBalance,
+    });
+
     const tokens = await tokenService.generateAuthTokens(user);
     return { user, tokens };
 };

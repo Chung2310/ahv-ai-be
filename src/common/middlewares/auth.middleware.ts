@@ -4,12 +4,13 @@ import jwt from 'jsonwebtoken';
 import config from '../config/config';
 import { ApiError } from '../utils/ApiError';
 import User from '../../modules/user/user.model';
+import logger from '../config/logger';
 
 export const auth = (...requiredRoles: string[]) => async (req: IRequest, res: express.Response, next: express.NextFunction) => {
     try {
-        console.log('Incoming Authorization Header:', req.headers.authorization);
+        logger.debug(`Incoming Authorization Header: ${req.headers.authorization}`);
         const token = req.headers.authorization?.replace('Bearer ', '');
-        console.log('Extracted Token:', token);
+        logger.debug(`Extracted Token: ${token}`);
         
         if (!token) {
             throw new ApiError(401, 'Vui lòng xác thực');
@@ -28,18 +29,19 @@ export const auth = (...requiredRoles: string[]) => async (req: IRequest, res: e
         }
 
         if (requiredRoles.length && !requiredRoles.includes(user.role)) {
-            console.log(`403 Forbidden: User role '${user.role}' not in required roles [${requiredRoles.join(', ')}]`);
+            logger.warn(`403 Forbidden: User role '${user.role}' not in required roles [${requiredRoles.join(', ')}]`);
             throw new ApiError(403, 'Không có quyền truy cập');
         }
 
         req.user = user;
-        console.log(`Authenticated user: ${user.email} (${user.role})`);
+        logger.info(`Authenticated user: ${user.email} (${user.role})`);
         next();
-    } catch (err: any) {
+    } catch (err: unknown) {
         if (err instanceof ApiError) {
             return next(err);
         }
-        const message = err.name === 'TokenExpiredError' ? 'Token đã hết hạn' : 'Xác thực thất bại';
-        next(new ApiError(401, `${message}: ${err.message}`));
+        const error = err as Error;
+        const message = error.name === 'TokenExpiredError' ? 'Token đã hết hạn' : 'Xác thực thất bại';
+        next(new ApiError(401, `${message}: ${error.message}`));
     }
 };

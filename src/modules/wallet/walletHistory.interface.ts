@@ -1,7 +1,7 @@
-import { ObjectId } from 'mongoose';
+import { Types } from 'mongoose';
 
 export interface IWalletHistory {
-    user: ObjectId;
+    user: Types.ObjectId | string;
     type: 'deposit' | 'withdraw' | 'payment';
     amount: number;
     balanceBefore: number;

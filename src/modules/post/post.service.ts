@@ -1,12 +1,16 @@
 import { IPost } from './post.interface';
 import Post from './post.model';
 import { ApiError } from '../../common/utils/ApiError';
+import { IPaginatedResult } from '../../common/interfaces/pagination.interface';
 
 export const createPost = async (postBody: Partial<IPost>): Promise<IPost> => {
     return Post.create(postBody);
 };
 
-export const getPosts = async (filter: Record<string, unknown>, options: { limit?: number; page?: number }) => {
+export const getPosts = async (
+    filter: Record<string, unknown>,
+    options: { limit?: number; page?: number },
+): Promise<IPaginatedResult<IPost>> => {
     const { limit = 10, page = 1 } = options;
     const skip = (page - 1) * limit;
 
