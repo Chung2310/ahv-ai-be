@@ -1,6 +1,6 @@
 import express from 'express';
 import { ApiError } from '../utils/ApiError';
-import logger from '../config/logger';
+import logger from '../utils/logger';
 
 export const errorHandler = (err: Error & { statusCode?: number }, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
     let statusCode = err.statusCode || 500;

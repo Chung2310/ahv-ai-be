@@ -3,6 +3,7 @@ import { IRequest } from '../../common/interfaces/request.interface';
 import catchAsync from '../../common/utils/catchAsync';
 import * as walletService from './wallet.service';
 import config from '../../common/config/config';
+import { ApiError } from '../../common/utils/ApiError';
 
 export const getMyWallet = catchAsync(async (req: IRequest, res: express.Response) => {
     if (!req.user) {
@@ -37,4 +38,12 @@ export const getWallets = catchAsync(async (req: IRequest, res: express.Response
     };
     const result = await walletService.queryWallets(filter, options);
     res.send({ success: true, data: result.items, meta: { totalItems: result.totalItems, totalPages: result.totalPages, currentPage: result.currentPage } });
+});
+
+export const getWalletByUserId = catchAsync(async (req: IRequest, res: express.Response) => {
+    const wallet = await walletService.getWalletByUserId(req.params.userId as string);
+    if (!wallet) {
+        throw new ApiError(404, 'Không tìm thấy ví của người dùng này');
+    }
+    res.send({ success: true, data: wallet });
 });

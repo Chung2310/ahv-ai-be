@@ -1,8 +1,8 @@
-import IORedis from 'ioredis';
+import Redis from 'ioredis';
 import config from './config';
-import logger from './logger';
+import logger from '../utils/logger';
 
-const redis = new IORedis({
+const redis = new Redis({
     host: config.redis.host,
     port: config.redis.port,
     maxRetriesPerRequest: null,

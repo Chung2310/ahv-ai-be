@@ -20,9 +20,22 @@ export const validate = (schema: object) => (req: Request, res: Response, next: 
         return next(new ApiError(400, errorMessage));
     }
     
-    if (value.params) Object.assign(req.params, value.params);
-    if (value.query) Object.assign(req.query, value.query);
-    if (value.body) Object.assign(req.body, value.body);
+    // Cập nhật giá trị sau khi validate (làm sạch các trường dư thừa)
+    if (value.params) {
+        const params = req.params as Record<string, unknown>;
+        Object.keys(params).forEach((key) => delete params[key]);
+        Object.assign(req.params, value.params);
+    }
+    if (value.query) {
+        const query = req.query as Record<string, unknown>;
+        Object.keys(query).forEach((key) => delete query[key]);
+        Object.assign(req.query, value.query);
+    }
+    if (value.body) {
+        const body = req.body as Record<string, unknown>;
+        Object.keys(body).forEach((key) => delete body[key]);
+        Object.assign(req.body, value.body);
+    }
     return next();
 };
 

@@ -6,6 +6,7 @@ import postRoute from '../../modules/post/post.route';
 import aiModelRoute from '../../modules/aimodel/aimodel.route';
 import walletRoute from '../../modules/wallet/wallet.route';
 import taskRoute from '../../modules/task/task.route';
+import ticketRoute from '../../modules/ticket/ticket.route';
 import mongoose from 'mongoose';
 
 const router = express.Router();
@@ -18,6 +19,7 @@ const defaultRoutes = [
     { path: '/aimodels', route: aiModelRoute },
     { path: '/wallets', route: walletRoute },
     { path: '/tasks', route: taskRoute },
+    { path: '/tickets', route: ticketRoute },
 ];
 
 router.get('/health', (req: express.Request, res: express.Response) => {

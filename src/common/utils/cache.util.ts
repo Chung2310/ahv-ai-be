@@ -1,5 +1,5 @@
 import redis from '../config/redis';
-import logger from '../config/logger';
+import logger from './logger';
 
 export const setCache = async (key: string, value: unknown, ttlSeconds = 3600) => {
     try {

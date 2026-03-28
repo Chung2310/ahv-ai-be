@@ -8,13 +8,22 @@ import config from './common/config/config';
 import { errorHandler } from './common/middlewares/error.middleware';
 import routesV1 from './routes/v1';
 import { ApiError } from './common/utils/ApiError';
+import logger from './common/utils/logger';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsdoc from 'swagger-jsdoc';
 
 const app = express();
 
 if (config.env !== 'test') {
-    app.use(morgan('combined'));
+    // Luồng stream để Morgan đẩy log vào Winston thay vì stdout/stderr trực tiếp
+    const morganStream = {
+        write: (message: string) => logger.info(message.trim()),
+    };
+
+    // Định dạng HTTP log: [METHOD] URL STATUS - RESPONSE_TIME ms
+    const morganFormat = '[:method] :url :status :res[content-length] - :response-time ms';
+
+    app.use(morgan(morganFormat, { stream: morganStream }));
 }
 
 // set security HTTP headers
