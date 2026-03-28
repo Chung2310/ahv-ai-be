@@ -1,6 +1,6 @@
 import User from '../../modules/user/user.model';
 import config from './config';
-import logger from './logger';
+import logger from '../utils/logger';
 
 export const seedAdmin = async () => {
     try {

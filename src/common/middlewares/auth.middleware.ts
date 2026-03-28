@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import config from '../config/config';
 import { ApiError } from '../utils/ApiError';
 import User from '../../modules/user/user.model';
-import logger from '../config/logger';
+import logger from '../utils/logger';
 
 export const auth = (...requiredRoles: string[]) => async (req: IRequest, res: express.Response, next: express.NextFunction) => {
     try {

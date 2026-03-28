@@ -2,7 +2,7 @@ import app from './app';
 import config from './common/config/config';
 import { connectDB } from './common/config/database';
 import { seedAdmin } from './common/config/seedAdmin';
-import logger from './common/config/logger';
+import logger from './common/utils/logger';
 
 // Bật các background worker
 import './modules/task/task.worker';
