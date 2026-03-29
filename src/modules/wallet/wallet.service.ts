@@ -10,7 +10,9 @@ export const createWallet = async (body: { user: string; balance?: number; curre
 };
 
 export const getWalletByUserId = async (userId: string) => {
-    return Wallet.findOne({ user: userId });
+    const wallet = await Wallet.findOne({ user: userId });
+    if (!wallet) throw new ApiError(404, 'Không tìm thấy ví');
+    return wallet;
 };
 
 export const updateBalance = async (userId: string, amount: number, description?: string) => {

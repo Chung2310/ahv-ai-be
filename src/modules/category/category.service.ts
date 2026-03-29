@@ -6,7 +6,7 @@ import { IPaginatedResult } from '../../common/interfaces/pagination.interface';
 
 export const createCategory = async (body: Partial<ICategory>): Promise<ICategory> => {
     const category = await Category.create(body);
-    await cacheUtil.deleteCache('categories_list');
+    await cacheUtil.deleteCacheByPattern('categories_list');
     return category;
 };
 
@@ -47,7 +47,7 @@ export const updateCategoryById = async (id: string, updateBody: Partial<ICatego
     if (!category) throw new ApiError(404, 'Không tìm thấy danh mục');
     Object.assign(category, updateBody);
     await category.save();
-    await cacheUtil.deleteCache('categories_list');
+    await cacheUtil.deleteCacheByPattern('categories_list');
     return category;
 };
 
@@ -55,6 +55,6 @@ export const deleteCategoryById = async (id: string) => {
     const category = await getCategoryById(id);
     if (!category) throw new ApiError(404, 'Không tìm thấy danh mục');
     await category.deleteOne();
-    await cacheUtil.deleteCache('categories_list');
+    await cacheUtil.deleteCacheByPattern('categories_list');
     return category;
 };

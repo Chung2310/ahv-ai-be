@@ -27,3 +27,35 @@ export const deleteCache = async (key: string) => {
         logger.error(`Error deleting cache for key ${key}:`, error);
     }
 };
+
+/**
+ * Xóa cache theo pattern (ví dụ: categories_list_*)
+ * Sử dụng SCAN thay vì KEYS để tránh làm treo Redis trên production
+ */
+export const deleteCacheByPattern = async (pattern: string) => {
+    try {
+        const stream = redis.scanStream({
+            match: `${pattern}*`,
+            count: 100,
+        });
+
+        const promises: Promise<any>[] = [];
+
+        stream.on('data', (keys: string[]) => {
+            if (keys.length) {
+                const pipeline = redis.pipeline();
+                keys.forEach((key) => {
+                    pipeline.del(key);
+                });
+                promises.push(pipeline.exec());
+            }
+        });
+
+        return new Promise((resolve, reject) => {
+            stream.on('end', () => Promise.all(promises).then(resolve).catch(reject));
+            stream.on('error', reject);
+        });
+    } catch (error) {
+        logger.error(`Error deleting cache by pattern ${pattern}:`, error);
+    }
+};

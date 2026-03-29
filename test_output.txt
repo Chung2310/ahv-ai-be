@@ -1,0 +1,319 @@
+﻿node.exe : 
+ts-jest[config] (WARN) 
+At line:1 char:1
++ & "C:\nvm4w\nodejs/node.
+exe" "C:\nvm4w\nodejs/node
+_modules/npm/bin/np ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo        
+      : NotSpecified: (t  
+  s-jest[config] (WARN)   
+  :String) [], RemoteE    
+xception
+    + FullyQualifiedError 
+   Id : NativeCommandErr  
+  or
+ 
+    The "ts-jest" config 
+option "isolatedModules" 
+is deprecated and will be 
+removed in v30.0.0. 
+Please use 
+"isolatedModules: true" 
+in E:/ahv-ai/ahv-ai-be/tsc
+onfig.test.json instead, 
+see https://www.typescript
+lang.org/tsconfig/#isolate
+dModules
+  
+FAIL src/modules/ticket/ti
+cket.service.test.ts
+  Ticket Service
+    createTicket
+      ΓêÜ N├¬n tß║ío 
+ticket th├ánh c├┤ng (10 
+ms)
+    getTicketById
+      ├ù N├¬n t├¼m thß║Ñy 
+ticket nß║┐u user sß╗ƒ 
+hß╗»u hoß║╖c l├á admin (2 
+ms)
+      ├ù N├¬n b├ío lß╗ùi 
+404 nß║┐u kh├┤ng t├¼m 
+thß║Ñy ticket (31 ms)
+    updateTicketStatus
+      ΓêÜ N├¬n cß║¡p 
+nhß║¡t trß║íng th├íi 
+ticket v├á phß║ún hß╗ôi 
+th├ánh c├┤ng (2 ms)
+
+  ΓùÅ Ticket Service ΓÇ║ 
+getTicketById ΓÇ║ N├¬n 
+t├¼m thß║Ñy ticket nß║┐u 
+user sß╗ƒ hß╗»u hoß║╖c 
+l├á admin
+
+    BSONError: input must 
+be a 24 character hex 
+string, 12 byte 
+Uint8Array, or an integer
+
+    [0m [90m 32 |[39m
+     [90m 33 |[39m 
+[36mexport[39m 
+[36mconst[39m 
+getTicketById [33m=[39m 
+[36masync[39m 
+(id[33m:[39m 
+string[33m,[39m userId[
+33m?[39m[33m:[39m 
+string[33m,[39m isAdmin 
+[33m=[39m 
+[36mfalse[39m) 
+[33m=>[39m {
+    
+[31m[1m>[22m[39m[90m 
+34 |[39m     
+[36mconst[39m 
+filter[33m:[39m [33mRec
+ord[39m[33m<[39m[33mst
+ring[39m[33m,[39m 
+unknown[33m>[39m 
+[33m=[39m { 
+_id[33m:[39m 
+[36mnew[39m [33mTypes[
+39m[33m.[39m[33mObjectI
+d[39m(id) }[33m;[39m
+     [90m    |[39m      
+                          
+                    
+[31m[1m^[22m[39m
+     [90m 35 |[39m     
+[36mif[39m 
+([33m![39misAdmin 
+[33m&&[39m userId) {
+     [90m 36 |[39m      
+   filter[33m.[39muser 
+[33m=[39m 
+userId[33m;[39m
+     [90m 37 |[39m     
+}[0m
+
+      at new ObjectId (nod
+e_modules/bson/src/objecti
+d.ts:113:15)
+      at src/modules/ticke
+t/ticket.service.ts:34:52
+      at src/modules/ticke
+t/ticket.service.ts:1820:4
+0
+      at __awaiter (src/mo
+dules/ticket/ticket.servic
+e.ts:1769:10)
+      at Object.__awaiter 
+[as getTicketById] (src/mo
+dules/ticket/ticket.servic
+e.ts:33:85)
+      at src/modules/ticke
+t/ticket.service.test.ts:3
+2:48
+      at src/modules/ticke
+t/ticket.service.test.ts:4
+1:71
+      at __awaiter (src/mo
+dules/ticket/ticket.servic
+e.test.ts:37:12)
+      at 
+Object.<anonymous> (src/mo
+dules/ticket/ticket.servic
+e.test.ts:26:78)
+
+  ΓùÅ Ticket Service ΓÇ║ 
+getTicketById ΓÇ║ N├¬n 
+b├ío lß╗ùi 404 nß║┐u 
+kh├┤ng t├¼m thß║Ñy ticket
+
+    expect(received).rejec
+ts.toThrow(expected)
+
+    Expected constructor: 
+ApiError
+    Received constructor: 
+BSONError
+
+    Received message: 
+"input must be a 24 
+character hex string, 12 
+byte Uint8Array, or an 
+integer"
+
+        [0m [90m 32 
+|[39m
+         [90m 33 |[39m 
+[36mexport[39m 
+[36mconst[39m 
+getTicketById [33m=[39m 
+[36masync[39m 
+(id[33m:[39m 
+string[33m,[39m userId[
+33m?[39m[33m:[39m 
+string[33m,[39m isAdmin 
+[33m=[39m 
+[36mfalse[39m) 
+[33m=>[39m {
+        
+[31m[1m>[22m[39m[90m 
+34 |[39m     
+[36mconst[39m 
+filter[33m:[39m [33mRec
+ord[39m[33m<[39m[33mst
+ring[39m[33m,[39m 
+unknown[33m>[39m 
+[33m=[39m { 
+_id[33m:[39m 
+[36mnew[39m [33mTypes[
+39m[33m.[39m[33mObjectI
+d[39m(id) }[33m;[39m
+         [90m    |[39m  
+                          
+                        
+[31m[1m^[22m[39m
+         [90m 35 |[39m  
+   [36mif[39m 
+([33m![39misAdmin 
+[33m&&[39m userId) {
+         [90m 36 |[39m  
+       
+filter[33m.[39muser 
+[33m=[39m 
+userId[33m;[39m
+         [90m 37 |[39m  
+   }[0m
+
+      at new ObjectId (nod
+e_modules/bson/src/objecti
+d.ts:113:15)
+      at src/modules/ticke
+t/ticket.service.ts:34:52
+      at src/modules/ticke
+t/ticket.service.ts:1820:4
+0
+      at __awaiter (src/mo
+dules/ticket/ticket.servic
+e.ts:1769:10)
+      at Object.__awaiter 
+[as getTicketById] (src/mo
+dules/ticket/ticket.servic
+e.ts:33:85)
+      at src/modules/ticke
+t/ticket.service.test.ts:4
+0:40
+      at src/modules/ticke
+t/ticket.service.test.ts:4
+1:71
+      at __awaiter (src/mo
+dules/ticket/ticket.servic
+e.test.ts:37:12)
+      at 
+Object.<anonymous> (src/mo
+dules/ticket/ticket.servic
+e.test.ts:36:70)
+      at Object.toThrow (n
+ode_modules/expect/build/i
+ndex.js:2155:20)
+      at src/modules/ticke
+t/ticket.service.test.ts:4
+0:74
+      at src/modules/ticke
+t/ticket.service.test.ts:4
+1:71
+      at __awaiter (src/mo
+dules/ticket/ticket.servic
+e.test.ts:37:12)
+      at 
+Object.<anonymous> (src/mo
+dules/ticket/ticket.servic
+e.test.ts:36:70)
+
+--------------------------|---------|----------|---------|---------|----------------------
+File                      | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s    
+--------------------------|---------|----------|---------|---------|----------------------
+All files                 |    2.57 |     1.04 |    3.01 |    2.12 |                      
+ common/constants         |       0 |      100 |     100 |       0 |                      
+  environment.constant.ts |       0 |      100 |     100 |       0 | 1-9                  
+ common/middlewares       |       0 |        0 |       0 |       0 |                      
+  auth.middleware.ts      |       0 |        0 |       0 |       0 | 3-45                 
+  error.middleware.ts     |       0 |        0 |       0 |       0 | 2-26                 
+  validate.middleware.ts  |       0 |        0 |       0 |       0 | 2-46                 
+ common/utils             |    1.33 |        0 |       0 |    1.66 |                      
+  ApiError.ts             |   14.28 |        0 |       0 |   14.28 | 6-12                 
+  cache.util.ts           |       0 |        0 |       0 |       0 | 1-57                 
+  catchAsync.ts           |       0 |      100 |       0 |       0 | 4-9                  
+  logger.ts               |       0 |        0 |       0 |       0 | 1-44                 
+  sleep.util.ts           |       0 |      100 |       0 |       0 | 6                    
+ modules/aimodel          |       0 |        0 |       0 |       0 |                      
+  aimodel.controller.ts   |       0 |        0 |       0 |       0 | 3-43                 
+  aimodel.route.ts        |       0 |      100 |     100 |       0 | 1-15                 
+  aimodel.service.ts      |       0 |        0 |       0 |       0 | 2-58                 
+  aimodel.validation.ts   |       0 |      100 |     100 |       0 | 1-43                 
+ modules/auth             |       0 |        0 |       0 |       0 |                      
+  auth.controller.ts      |       0 |        0 |       0 |       0 | 3-55                 
+  auth.route.ts           |       0 |      100 |     100 |       0 | 1-22                 
+  auth.service.ts         |       0 |        0 |       0 |       0 | 1-45                 
+  auth.validation.ts      |       0 |        0 |       0 |       0 | 1-34                 
+ modules/category         |       0 |        0 |       0 |       0 |                      
+  category.controller.ts  |       0 |        0 |       0 |       0 | 3-43                 
+  category.route.ts       |       0 |      100 |     100 |       0 | 1-15                 
+  category.service.ts     |       0 |        0 |       0 |       0 | 2-59                 
+  category.validation.ts  |       0 |      100 |     100 |       0 | 1-33                 
+ modules/post             |       0 |        0 |       0 |       0 |                      
+  post.controller.ts      |       0 |        0 |       0 |       0 | 3-53                 
+  post.route.ts           |       0 |      100 |     100 |       0 | 1-15                 
+  post.service.ts         |       0 |        0 |       0 |       0 | 2-46                 
+  post.validation.ts      |       0 |        0 |       0 |       0 | 1-48                 
+ modules/task             |       0 |        0 |       0 |       0 |                      
+  ahv.service.ts          |       0 |      100 |       0 |       0 | 1-41                 
+  task.controller.ts      |       0 |        0 |       0 |       0 | 3-52                 
+  task.queue.ts           |       0 |      100 |     100 |       0 | 1-13                 
+  task.route.ts           |       0 |      100 |     100 |       0 | 1-22                 
+  task.service.ts         |       0 |        0 |       0 |       0 | 1-108                
+  task.validation.ts      |       0 |        0 |       0 |       0 | 1-27                 
+  task.worker.ts          |       0 |        0 |       0 |       0 | 1-117                
+ modules/ticket           |   26.88 |    11.53 |      30 |   21.51 |                      
+  ticket.controller.ts    |       0 |        0 |       0 |       0 | 3-58                 
+  ticket.route.ts         |       0 |      100 |     100 |       0 | 1-26                 
+  ticket.service.ts       |   58.13 |    18.75 |      60 |      50 | 16-25,35-43,49,62-67 
+  ticket.validation.ts    |       0 |      100 |     100 |       0 | 1-41                 
+ modules/user             |       0 |        0 |       0 |       0 |                      
+  token.service.ts        |       0 |        0 |       0 |       0 | 1-46                 
+  user.controller.ts      |       0 |        0 |       0 |       0 | 3-47                 
+  user.route.ts           |       0 |      100 |     100 |       0 | 1-25                 
+  user.service.ts         |       0 |        0 |       0 |       0 | 2-60                 
+  user.validation.ts      |       0 |        0 |       0 |       0 | 1-57                 
+ modules/wallet           |       0 |        0 |       0 |       0 |                      
+  wallet.controller.ts    |       0 |        0 |       0 |       0 | 3-48                 
+  wallet.route.ts         |       0 |      100 |     100 |       0 | 1-14                 
+  wallet.service.ts       |       0 |        0 |       0 |       0 | 1-81                 
+  wallet.validation.ts    |       0 |      100 |     100 |       0 | 1-21                 
+ routes/v1                |       0 |        0 |       0 |       0 |                      
+  index.ts                |       0 |        0 |       0 |       0 | 1-38                 
+ types                    |       0 |        0 |       0 |       0 |                      
+  express.d.ts            |       0 |        0 |       0 |       0 |                      
+--------------------------|---------|----------|---------|---------|----------------------
+Test Suites: 1 failed, 1 
+total
+Tests:       2 failed, 2 
+passed, 4 total
+Snapshots:   0 total
+Time:        6.478 s
+Ran all test suites 
+matching src/modules/ticke
+t/ticket.service.test.ts.
+Force exiting Jest: Have 
+you considered using 
+`--detectOpenHandles` to 
+detect async operations 
+that kept running after 
+all tests finished?
