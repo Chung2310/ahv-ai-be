@@ -6,7 +6,7 @@ import { IPaginatedResult } from '../../common/interfaces/pagination.interface';
 
 export const createAiModel = async (body: Partial<IAiModel>): Promise<IAiModel> => {
     const aiModel = await AiModel.create(body);
-    await cacheUtil.deleteCache('aimodels_list');
+    await cacheUtil.deleteCacheByPattern('aimodels_list');
     return aiModel;
 };
 
@@ -46,7 +46,7 @@ export const updateAiModelById = async (id: string, updateBody: Partial<IAiModel
     if (!model) throw new ApiError(404, 'Không tìm thấy mô hình');
     Object.assign(model, updateBody);
     await model.save();
-    await cacheUtil.deleteCache('aimodels_list');
+    await cacheUtil.deleteCacheByPattern('aimodels_list');
     return model;
 };
 
@@ -54,6 +54,6 @@ export const deleteAiModelById = async (id: string) => {
     const model = await getAiModelById(id);
     if (!model) throw new ApiError(404, 'Không tìm thấy mô hình');
     await model.deleteOne();
-    await cacheUtil.deleteCache('aimodels_list');
+    await cacheUtil.deleteCacheByPattern('aimodels_list');
     return model;
 };

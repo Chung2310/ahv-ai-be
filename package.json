@@ -6,6 +6,9 @@
     "start": "node dist/server.js",
     "dev": "nodemon --watch src/**/*.ts --exec \"ts-node -r ./src/common/interfaces/request.interface.ts src/server.ts\"",
     "build": "tsc",
+    "test": "jest",
+    "test:watch": "jest --watchAll",
+    "test:coverage": "jest --coverage",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\"",
     "lint:fix": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "format": "prettier --write \"src/**/*.ts\""

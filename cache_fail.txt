@@ -1,0 +1,28 @@
+﻿node.exe : E:\ahv-ai\ahv-a
+i-be\src\common\utils\cach
+e.util.ts:1799
+At line:1 char:1
++ & "C:\nvm4w\nodejs/node.
+exe" "C:\nvm4w\nodejs/node
+_modules/npm/bin/np ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo        
+      : NotSpecified: (E  
+  :\ahv-ai\ahv-a...he.u   
+ til.ts:1799:String) [    
+], RemoteException
+    + FullyQualifiedError 
+   Id : NativeCommandErr  
+  or
+ 
+              
+pipeline.del(key);
+                       ^
+
+[TypeError: Cannot read 
+properties of undefined 
+(reading 'del')]
+
+Node.js v22.21.1
