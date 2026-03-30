@@ -71,7 +71,7 @@ describe('User Service', () => {
         test('Nên tạo người dùng thành công nếu không có email', async () => {
             const mockBody = { name: 'NoEmail' };
             (User.create as jest.Mock).mockResolvedValue(mockBody);
-            await userService.createUser(mockBody as any);
+            await userService.createUser(mockBody as unknown as never);
             expect(User.findOne).not.toHaveBeenCalled();
             expect(User.create).toHaveBeenCalled();
         });

@@ -1,7 +1,7 @@
 import * as tokenService from './token.service';
 import Token from './token.model';
 import jwt from 'jsonwebtoken';
-import moment from 'moment';
+import { IUser } from './user.interface';
 
 // Mock models
 jest.mock('./token.model');
@@ -19,7 +19,7 @@ describe('Token Service', () => {
             (jwt.sign as jest.Mock).mockReturnValue('mocked_token');
             (Token.create as jest.Mock).mockResolvedValue({});
 
-            const tokens = await tokenService.generateAuthTokens(mockUser as any);
+            const tokens = await tokenService.generateAuthTokens(mockUser as unknown as IUser);
 
             expect(tokens.access.token).toBe('mocked_token');
             expect(tokens.refresh.token).toBe('mocked_token');

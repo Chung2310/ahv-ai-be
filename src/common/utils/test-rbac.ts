@@ -6,16 +6,19 @@ const BASE_URL = 'http://localhost:5005/api/v1';
 
 async function login(email: string, pass: string) {
     try {
+        // eslint-disable-next-line no-console
         console.log(`Debug Login for: ${email}`);
         const res = await axios.post(`${BASE_URL}/auths/login`, { email, password: pass });
         return res.data.data.tokens.access.token;
-    } catch (error: any) {
-        console.error(`Login failed for ${email}: ${error.response?.data?.message || error.message}`);
+    } catch (error: unknown) {
+        const axiosError = error as { response?: { data?: { message?: string } }; message: string };
+        console.error(`Login failed for ${email}: ${axiosError.response?.data?.message || axiosError.message}`);
         return null;
     }
 }
 
 async function runTests() {
+    // eslint-disable-next-line no-console
     console.log('🚀 Bắt đầu kiểm thử RBAC toàn diện...');
 
     const superAdminToken = await login('admin@gmail.com', 'Admin@123'); // SuperAdmin from .env
@@ -23,19 +26,29 @@ async function runTests() {
     const userToken = await login('user@gmail.com', 'User@123');
 
     const roles = ['user', 'admin', 'superadmin'];
-    const results: any[] = [];
+    interface TestResult {
+        role: string;
+        permission: string;
+        method: string;
+        route: string;
+        status: number;
+        hasPermission: boolean;
+        passed: boolean;
+    }
+    const results: TestResult[] = [];
 
     for (const roleName of roles) {
         const token = roleName === 'user' ? userToken : (roleName === 'admin' ? adminToken : superAdminToken);
         const rolePerms = permissionsConfig.find(p => p.role === roleName)?.permissions || [];
-
+        
+        // eslint-disable-next-line no-console
         console.log(`\n--- Testing Role: ${roleName} ---`);
 
         for (const [permKey, api] of Object.entries(routeDetail)) {
             const hasPermission = rolePerms.includes(permKey);
             
             // Thay thế các tham số mẫu trong route
-            let testUrl = api.route
+            const testUrl = api.route
                 .replace(':userId', '507f1f77bcf86cd799439011')
                 .replace(':postId', '507f1f77bcf86cd799439011')
                 .replace(':categoryId', '507f1f77bcf86cd799439011')
@@ -69,9 +82,10 @@ async function runTests() {
                     process.stdout.write('✅');
                 } else {
                     process.stdout.write('❌');
+                    // eslint-disable-next-line no-console
                     console.log(`\n   FAILED RBAC: ${roleName} | ${permKey} | ${api.method} ${api.route} | Got ${res.status}, Expected ${hasPermission ? 'NOT 403' : '403'}`);
                 }
-            } catch (err) {
+            } catch {
                 process.stdout.write('⚠️');
             }
         }
@@ -79,6 +93,7 @@ async function runTests() {
 
     const total = results.length;
     const passedCount = results.filter(r => r.passed).length;
+    // eslint-disable-next-line no-console
     console.log(`\n\n📊 TỔNG KẾT: ${passedCount}/${total} kịch bản thành công!`);
 }
 

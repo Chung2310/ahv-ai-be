@@ -1,5 +1,4 @@
 import User from '../../modules/user/user.model';
-import config from './config';
 import logger from '../utils/logger';
 
 export const seedTestUsers = async () => {

@@ -92,25 +92,25 @@ describe('Cache Utils', () => {
         });
 
         test('Nên tiếp tục nếu không tìm thấy key (empty list)', async () => {
-            const mockStream: any = {
-                on: jest.fn((event: string, cb: any) => {
-                    if (event === 'data') cb([]); // Empty keys
-                    if (event === 'end') cb();
+            const mockStream: { on: jest.Mock } = {
+                on: jest.fn((event: string, cb: (...args: unknown[]) => void) => {
+                    if (event === 'data') (cb as (keys: string[]) => void)([]); // Empty keys
+                    if (event === 'end') (cb as () => void)();
                     return mockStream;
                 }),
-            };
+            } as unknown as { on: jest.Mock };
             (redis.scanStream as jest.Mock).mockReturnValue(mockStream);
             await cacheUtil.deleteCacheByPattern('prefix');
             expect(redis.pipeline).not.toHaveBeenCalled();
         });
 
         test('Nên xử lý lỗi stream', async () => {
-            const mockStream: any = {
-                on: jest.fn((event: string, cb: any) => {
-                    if (event === 'error') cb(new Error('Stream Error'));
+            const mockStream: { on: jest.Mock } = {
+                on: jest.fn((event: string, cb: (...args: unknown[]) => void) => {
+                    if (event === 'error') (cb as (err: Error) => void)(new Error('Stream Error'));
                     return mockStream;
                 }),
-            };
+            } as unknown as { on: jest.Mock };
             (redis.scanStream as jest.Mock).mockReturnValue(mockStream);
             await expect(cacheUtil.deleteCacheByPattern('prefix')).rejects.toThrow('Stream Error');
         });

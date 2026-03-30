@@ -21,7 +21,7 @@ describe('permission.util Utility', () => {
 
         test('Nên bắt lỗi nếu role là undefined', () => {
             // Ép lỗi bằng tham số không hợp lệ
-            const perms = getPermissionsByRoleNames(undefined as any);
+            const perms = getPermissionsByRoleNames(undefined as unknown as string);
             expect(perms).toEqual([]);
         });
     });
@@ -84,17 +84,17 @@ describe('permission.util Utility', () => {
     describe('Error Handling (Catch Blocks)', () => {
         test('replaceRouteParam nên trả về path gốc nếu lỗi', () => {
             // Ép lỗi bằng cách truyền null vào replace
-            const result = replaceRouteParam(null as any, 'val', null as any);
+            const result = replaceRouteParam(null as unknown as string, 'val', null as unknown as string);
             expect(result).toBeNull();
         });
 
         test('checkPermissionsPath nên trả về false nếu lỗi', () => {
-            const result = checkPermissionsPath(null as any, '/path', 'GET');
+            const result = checkPermissionsPath(null as unknown as ApiPermission[], '/path', 'GET');
             expect(result).toBe(false);
         });
 
         test('getApisByPermissions nên trả về mảng rỗng nếu lỗi', () => {
-            const result = getApisByPermissions(null as any);
+            const result = getApisByPermissions(null as unknown as string[]);
             expect(result).toEqual([]);
         });
 

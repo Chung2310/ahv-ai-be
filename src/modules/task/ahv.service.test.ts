@@ -1,6 +1,5 @@
 import ahvService from './ahv.service';
 import axios from 'axios';
-import ENVIRONMENT from '../../common/constants/environment.constant';
 
 // Mock axios
 jest.mock('axios', () => {

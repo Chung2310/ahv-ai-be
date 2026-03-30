@@ -98,11 +98,11 @@ describe('Task Service', () => {
         });
 
         test('Nên cập nhật trạng thái failed và lưu lỗi', async () => {
-            const mockTask = { status: 'pending', save: jest.fn().mockResolvedValue(true) };
+            const mockTask = { status: 'pending', save: jest.fn().mockResolvedValue(true), error: '' };
             (Task.findById as jest.Mock).mockResolvedValue(mockTask);
             await taskService.handleWebhook('id', { status: 'failed', error: 'Internal Error' });
             expect(mockTask.status).toBe('failed');
-            expect((mockTask as any).error).toBe('Internal Error');
+            expect(mockTask.error).toBe('Internal Error');
         });
 
         test('Nên giữ nguyên trạng thái nếu AHV trả về status không xác định', async () => {

@@ -1,12 +1,19 @@
 import * as ticketService from './ticket.service';
 import Ticket from './ticket.model';
 import { ApiError } from '../../common/utils/ApiError';
-import { Types } from 'mongoose';
+import { TicketStatus } from './ticket.interface';
 
 // Mock Mongoose model
 jest.mock('./ticket.model');
 
 describe('Ticket Service', () => {
+    interface MockTicket {
+        status: string;
+        response?: string;
+        save: jest.Mock;
+        deleteOne?: jest.Mock;
+    }
+
     afterEach(() => {
         jest.clearAllMocks();
     });
@@ -16,7 +23,7 @@ describe('Ticket Service', () => {
             const mockBody = { subject: 'Lỗi nạp tiền', message: 'Tôi không nạp được tiền' };
             (Ticket.create as jest.Mock).mockResolvedValue({ ...mockBody, user: 'user123' });
 
-            const result = await ticketService.createTicket('user123', mockBody as any);
+            const result = await ticketService.createTicket('user123', mockBody as unknown as { subject: string; message: string });
 
             expect(Ticket.create).toHaveBeenCalled();
             expect(result.user).toBe('user123');
@@ -52,32 +59,32 @@ describe('Ticket Service', () => {
     });
 
     describe('updateTicketStatus', () => {
-        test('Nên cập nhật trạng thái ticket và phản hồi thành công', async () => {
-            const mockTicket = { 
-                status: 'open', 
+        test('Nên cập trạng thái ticket và phản hồi thành công', async () => {
+            const mockTicket: MockTicket = { 
+                status: TicketStatus.PENDING, 
                 save: jest.fn().mockResolvedValue(true) 
             };
             (Ticket.findById as jest.Mock).mockResolvedValue(mockTicket);
 
-            await ticketService.updateTicketStatus('507f1f77bcf86cd799439011', 'resolved' as any, 'Đã xử lý xong');
+            await ticketService.updateTicketStatus('507f1f77bcf86cd799439011', TicketStatus.RESOLVED, 'Đã xử lý xong');
 
-            expect(mockTicket.status).toBe('resolved');
-            expect((mockTicket as any).response).toBe('Đã xử lý xong');
+            expect(mockTicket.status).toBe(TicketStatus.RESOLVED);
+            expect(mockTicket.response).toBe('Đã xử lý xong');
             expect(mockTicket.save).toHaveBeenCalled();
         });
 
         test('Nên ném lỗi 404 nếu cập nhật ticket không tồn tại', async () => {
             (Ticket.findById as jest.Mock).mockResolvedValue(null);
-            await expect(ticketService.updateTicketStatus('507f1f77bcf86cd799439011', 'resolved' as any))
+            await expect(ticketService.updateTicketStatus('507f1f77bcf86cd799439011', TicketStatus.RESOLVED))
                 .rejects.toThrow(ApiError);
         });
 
         test('Nên cập nhật trạng thái thành công mà không có phản hồi', async () => {
-            const mockTicket = { status: 'open', save: jest.fn().mockResolvedValue(true) };
+            const mockTicket: MockTicket = { status: TicketStatus.PENDING, save: jest.fn().mockResolvedValue(true) };
             (Ticket.findById as jest.Mock).mockResolvedValue(mockTicket);
-            await ticketService.updateTicketStatus('id', 'pending' as any);
-            expect(mockTicket.status).toBe('pending');
-            expect((mockTicket as any).response).toBeUndefined();
+            await ticketService.updateTicketStatus('id', TicketStatus.PENDING);
+            expect(mockTicket.status).toBe(TicketStatus.PENDING);
+            expect(mockTicket.response).toBeUndefined();
         });
     });
 

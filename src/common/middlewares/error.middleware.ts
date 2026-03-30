@@ -2,6 +2,7 @@ import express from 'express';
 import { ApiError } from '../utils/ApiError';
 import logger from '../utils/logger';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const errorHandler = (err: Error & { statusCode?: number }, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
     let statusCode = err.statusCode || 500;
     let message = err.message;
