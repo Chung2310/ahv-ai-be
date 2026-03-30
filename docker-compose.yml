@@ -19,12 +19,12 @@ services:
       - no-new-privileges:true
       
     ports:
-      - '${PORT:-5004}:${PORT:-5004}'
+      - '${PORT:-5006}:${PORT:-5006}'
       
     env_file: .env
     
     healthcheck:
-      test: ['CMD-SHELL', 'curl --fail http://localhost:${PORT:-5004}/api/v1/health || exit 1']
+      test: ['CMD-SHELL', 'curl --fail http://localhost:${PORT:-5006}/api/v1/health || exit 1']
       interval: 10s
       timeout: 5s
       retries: 5
