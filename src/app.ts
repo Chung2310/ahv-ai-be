@@ -30,10 +30,10 @@ if (config.env !== 'test') {
 app.use(helmet());
 
 // parse json request body
-app.use(express.json());
+app.use(express.json({ limit: config.payloadLimit }));
 
 // parse urlencoded request body
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ limit: config.payloadLimit, extended: true }));
 
 // parse cookies
 app.use(cookieParser());

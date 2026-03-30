@@ -2,6 +2,7 @@ import app from './app';
 import config from './common/config/config';
 import { connectDB } from './common/config/database';
 import { seedAdmin } from './common/config/seedAdmin';
+import { seedTestUsers } from './common/config/seedTestUsers';
 import logger from './common/utils/logger';
 
 // Bật các background worker
@@ -13,6 +14,7 @@ let server: Server;
 
 connectDB().then(async () => {
     await seedAdmin();
+    await seedTestUsers();
     server = app.listen(config.port, () => {
         logger.info(`Listening to port ${config.port}`);
     });

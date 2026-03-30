@@ -1,0 +1,40 @@
+[
+    {
+        "role": "user",
+        "permissions": [
+            "AUTH_ME", "AUTH_LOGOUT", 
+            "WALLET_ME",
+            "TASK_LIST", "TASK_DETAIL", "TASK_CREATE",
+            "TICKET_LIST", "TICKET_DETAIL", "TICKET_CREATE",
+            "CATEGORY_LIST", "CATEGORY_DETAIL",
+            "POST_LIST", "POST_DETAIL",
+            "AIMODEL_LIST", "AIMODEL_DETAIL"
+        ]
+    },
+    {
+        "role": "admin",
+        "permissions": [
+            "AUTH_ME", "AUTH_LOGOUT",
+            "USER_LIST", "USER_DETAIL",
+            "CATEGORY_LIST", "CATEGORY_DETAIL", "CATEGORY_CREATE", "CATEGORY_UPDATE",
+            "POST_LIST", "POST_DETAIL", "POST_CREATE", "POST_UPDATE",
+            "AIMODEL_LIST", "AIMODEL_DETAIL", "AIMODEL_CREATE", "AIMODEL_UPDATE",
+            "WALLET_LIST", "WALLET_DETAIL", "WALLET_ME",
+            "TASK_LIST", "TASK_DETAIL", "TASK_CREATE",
+            "TICKET_LIST", "TICKET_DETAIL", "TICKET_CREATE", "TICKET_UPDATE_STATUS", "TICKET_DELETE"
+        ]
+    },
+    {
+        "role": "superadmin",
+        "permissions": [
+            "AUTH_ME", "AUTH_LOGOUT",
+            "USER_LIST", "USER_DETAIL", "USER_UPDATE", "USER_DELETE",
+            "CATEGORY_LIST", "CATEGORY_DETAIL", "CATEGORY_CREATE", "CATEGORY_UPDATE", "CATEGORY_DELETE",
+            "POST_LIST", "POST_DETAIL", "POST_CREATE", "POST_UPDATE", "POST_DELETE",
+            "AIMODEL_LIST", "AIMODEL_DETAIL", "AIMODEL_CREATE", "AIMODEL_UPDATE", "AIMODEL_DELETE",
+            "WALLET_LIST", "WALLET_DETAIL", "WALLET_ME", "WALLET_UPDATE_BALANCE",
+            "TASK_LIST", "TASK_DETAIL", "TASK_CREATE",
+            "TICKET_LIST", "TICKET_DETAIL", "TICKET_CREATE", "TICKET_UPDATE_STATUS", "TICKET_DELETE"
+        ]
+    }
+]

@@ -47,9 +47,16 @@ describe('Auth Service', () => {
             (tokenService.generateAuthTokens as jest.Mock).mockResolvedValue(mockTokens);
 
             const result = await authService.login('test@ex.com', 'password');
-
+ 
             expect(userService.loginUserWithEmailAndPassword).toHaveBeenCalledWith('test@ex.com', 'password');
             expect(result.tokens).toBe(mockTokens);
+        });
+
+        test('Nên ném lỗi nếu đăng nhập thất bại (userService ném lỗi)', async () => {
+            const error = new ApiError(401, 'Sai email hoặc mật khẩu');
+            (userService.loginUserWithEmailAndPassword as jest.Mock).mockRejectedValue(error);
+
+            await expect(authService.login('wrong@ex.com', 'wrong_pass')).rejects.toThrow(error);
         });
     });
 
@@ -68,9 +75,17 @@ describe('Auth Service', () => {
             (tokenService.generateAuthTokens as jest.Mock).mockResolvedValue(mockTokens);
 
             const result = await authService.refreshToken('old_refresh_token');
-
+ 
             expect(tokenService.verifyToken).toHaveBeenCalledWith('old_refresh_token', 'refresh');
             expect(result.tokens).toBe(mockTokens);
+        });
+
+        test('Nên ném lỗi nếu không tìm thấy người dùng sau khi xác thực token', async () => {
+            const mockTokenDoc = { user: 'user123' };
+            (tokenService.verifyToken as jest.Mock).mockResolvedValue(mockTokenDoc);
+            (userService.getUserById as jest.Mock).mockResolvedValue(null);
+
+            await expect(authService.refreshToken('valid_token')).rejects.toThrow('Người dùng không tồn tại');
         });
     });
 });

@@ -5,6 +5,7 @@ import config from '../config/config';
 import { ApiError } from '../utils/ApiError';
 import User from '../../modules/user/user.model';
 import logger from '../utils/logger';
+import { getPermissionsByRoleNames, getApisByPermissions, checkPermissionsPath } from '../utils/permission.util';
 
 export const auth = (...requiredRoles: string[]) => async (req: IRequest, res: express.Response, next: express.NextFunction) => {
     try {
@@ -33,8 +34,20 @@ export const auth = (...requiredRoles: string[]) => async (req: IRequest, res: e
             throw new ApiError(403, 'Không có quyền truy cập');
         }
 
+        // --- RBAC Động ---
+        const permissions = getPermissionsByRoleNames(user.role);
+        const allowedApis = getApisByPermissions(permissions);
+        
+        // Kiểm tra quyền đối với đường dẫn (URL) và phương thức (method) hiện tại
+        const isAllowed = checkPermissionsPath(allowedApis, req.originalUrl, req.method);
+        
+        if (!isAllowed) {
+            logger.warn(`403 Forbidden: User ${user.email} (${user.role}) is NOT allowed to access ${req.method} ${req.originalUrl}`);
+            throw new ApiError(403, 'Bạn không có quyền thực hiện hành động này');
+        }
+
         req.user = user;
-        logger.info(`Authenticated user: ${user.email} (${user.role})`);
+        logger.info(`Authenticated and Authorized user: ${user.email} (${user.role}) for ${req.method} ${req.originalUrl}`);
         next();
     } catch (err: unknown) {
         if (err instanceof ApiError) {

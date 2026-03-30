@@ -61,3 +61,14 @@ coverage/
 .agent/
 _agents/
 _agent/
+
+# Local Testing & Postman exports
+*.postman_collection.json
+*.postman_environment.json
+*.postman_test_run.json
+
+# Local scripts / tmp outputs
+*.out
+*.tmp
+tmp/
+temp/

@@ -1,6 +1,5 @@
 import * as postService from './post.service';
 import Post from './post.model';
-import { ApiError } from '../../common/utils/ApiError';
 
 // Mock Mongoose model
 jest.mock('./post.model');
@@ -15,7 +14,7 @@ describe('Post Service', () => {
             const mockBody = { title: 'Dịch vụ AI mới', content: 'Nội dung chi tiết' };
             (Post.create as jest.Mock).mockResolvedValue(mockBody);
 
-            const result = await postService.createPost(mockBody as any);
+            const result = await postService.createPost(mockBody);
 
             expect(Post.create).toHaveBeenCalledWith(mockBody);
             expect(result).toEqual(mockBody);
@@ -25,7 +24,7 @@ describe('Post Service', () => {
     describe('getPosts', () => {
         test('Nên lấy danh sách bài viết phân trang thành công', async () => {
             const mockItems = [{ title: 'Bài viết 1' }];
-            (Post.find as any).mockReturnValue({
+            (Post.find as jest.Mock).mockReturnValue({
                 sort: jest.fn().mockReturnThis(),
                 skip: jest.fn().mockReturnThis(),
                 limit: jest.fn().mockReturnThis(),
@@ -47,7 +46,7 @@ describe('Post Service', () => {
                 title: 'Cũ', 
                 save: jest.fn().mockResolvedValue(true) 
             };
-            (Post.findById as any).mockReturnValue({
+            (Post.findById as jest.Mock).mockReturnValue({
                 populate: jest.fn().mockResolvedValue(mockPost),
             });
 
@@ -56,6 +55,14 @@ describe('Post Service', () => {
             expect(mockPost.title).toBe('Mới');
             expect(mockPost.save).toHaveBeenCalled();
         });
+
+        test('Nên trả về null nếu không tìm thấy bài viết để cập nhật', async () => {
+            (Post.findById as jest.Mock).mockReturnValue({
+                populate: jest.fn().mockResolvedValue(null),
+            });
+            const result = await postService.updatePostById('invalid', {});
+            expect(result).toBeNull();
+        });
     });
 
     describe('deletePostById', () => {
@@ -63,13 +70,20 @@ describe('Post Service', () => {
             const mockPost = { 
                 deleteOne: jest.fn().mockResolvedValue(true) 
             };
-            (Post.findById as any).mockReturnValue({
+            (Post.findById as jest.Mock).mockReturnValue({
                 populate: jest.fn().mockResolvedValue(mockPost),
             });
 
             await postService.deletePostById('507f1f77bcf86cd799439011');
 
             expect(mockPost.deleteOne).toHaveBeenCalled();
+        });
+
+        test('Nên báo lỗi 404 nếu không tìm thấy bài viết để xóa', async () => {
+            (Post.findById as jest.Mock).mockReturnValue({
+                populate: jest.fn().mockResolvedValue(null),
+            });
+            await expect(postService.deletePostById('invalid')).rejects.toThrow('Không tìm thấy bài viết');
         });
     });
 });

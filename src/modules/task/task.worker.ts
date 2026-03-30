@@ -8,9 +8,7 @@ import connection from '../../common/config/redis';
 import ahvService from './ahv.service';
 import { sleep } from '../../common/utils/sleep.util';
 
-export const taskWorker = new Worker(
-    'AHV_AI_TaskProcess',
-    async (job: Job<ITaskJobData>) => {
+export const processTaskJob = async (job: Job<ITaskJobData>) => {
         const { taskId, payload } = job.data;
         
         logger.info(`[Worker] Processing Job ${job.id} for Task ${taskId}`);
@@ -105,7 +103,11 @@ export const taskWorker = new Worker(
             logger.error(`[Worker] Critical failure for Task ${taskId}: ${errorMessage}`);
             throw error;
         }
-    },
+};
+
+export const taskWorker = new Worker(
+    'AHV_AI_TaskProcess',
+    processTaskJob,
     { connection }
 );
 

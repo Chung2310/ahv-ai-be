@@ -23,6 +23,7 @@ const envVarsSchema = Joi.object()
         REDIS_HOST: Joi.string().default('localhost').description('Redis host for BullMQ'),
         REDIS_PORT: Joi.number().default(6379).description('Redis port'),
         INITIAL_WALLET_BALANCE: Joi.number().default(0).description('Initial balance for new users'),
+        PAYLOAD_LIMIT: Joi.string().default('50mb').description('Maximum payload limit for requests'),
     })
     .unknown();
 
@@ -64,4 +65,5 @@ export default {
         port: envVars.REDIS_PORT,
     },
     initialWalletBalance: envVars.INITIAL_WALLET_BALANCE,
+    payloadLimit: envVars.PAYLOAD_LIMIT,
 };

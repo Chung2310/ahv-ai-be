@@ -39,7 +39,7 @@ export const deleteCacheByPattern = async (pattern: string) => {
             count: 100,
         });
 
-        const promises: Promise<any>[] = [];
+        const promises: Promise<unknown>[] = [];
 
         stream.on('data', (keys: string[]) => {
             if (keys.length) {

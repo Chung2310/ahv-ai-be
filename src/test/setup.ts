@@ -17,15 +17,32 @@ process.env.LOG_LEVEL = 'error'; // Giảm nhiễu log khi chạy test
 
 // Mock Redis toàn cục để tránh lỗi kết nối trong các bộ test khác
 jest.mock('ioredis', () => {
-  return jest.fn().mockImplementation(() => ({
-    on: jest.fn(),
-    set: jest.fn().mockResolvedValue('OK'),
-    get: jest.fn().mockResolvedValue(null),
-    del: jest.fn().mockResolvedValue(1),
-    scanStream: jest.fn(),
-    pipeline: jest.fn().mockReturnValue({
-      del: jest.fn().mockReturnThis(),
-      exec: jest.fn().mockResolvedValue([]),
-    }),
-  }));
+    return jest.fn().mockImplementation(() => ({
+        on: jest.fn(),
+        set: jest.fn().mockResolvedValue('OK'),
+        get: jest.fn().mockResolvedValue(null),
+        del: jest.fn().mockResolvedValue(1),
+        scanStream: jest.fn(),
+        pipeline: jest.fn().mockReturnValue({
+            del: jest.fn().mockReturnThis(),
+            exec: jest.fn().mockResolvedValue([]),
+        }),
+    }));
+});
+
+// Mock BullMQ toàn cục để tránh open handles từ các Worker/Queue ẩn
+jest.mock('bullmq', () => {
+    return {
+        Queue: jest.fn().mockImplementation(() => ({
+            add: jest.fn().mockResolvedValue({ id: 'mock-job-id' }),
+            on: jest.fn(),
+        })),
+        Worker: jest.fn().mockImplementation(() => ({
+            on: jest.fn(),
+            close: jest.fn().mockResolvedValue(undefined),
+        })),
+        Scheduler: jest.fn().mockImplementation(() => ({
+            close: jest.fn().mockResolvedValue(undefined),
+        })),
+    };
 });

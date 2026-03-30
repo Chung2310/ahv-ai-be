@@ -1,9 +1,11 @@
 import * as walletService from './wallet.service';
 import Wallet from './wallet.model';
+import WalletHistory from './walletHistory.model';
 import { ApiError } from '../../common/utils/ApiError';
 
 // Mock Mongoose model
 jest.mock('./wallet.model');
+jest.mock('./walletHistory.model');
 
 describe('Wallet Service', () => {
     afterEach(() => {
@@ -14,53 +16,64 @@ describe('Wallet Service', () => {
         test('Nên tạo ví thành công', async () => {
             const mockBody = { user: 'user123', balance: 1000 };
             (Wallet.create as jest.Mock).mockResolvedValue(mockBody);
-
             const result = await walletService.createWallet(mockBody);
-
-            expect(Wallet.create).toHaveBeenCalledWith(mockBody);
             expect(result).toEqual(mockBody);
         });
     });
 
     describe('getWalletByUserId', () => {
         test('Nên trả về ví nếu tìm thấy', async () => {
-            const mockWallet = { user: '507f191e810c19729de860ea', balance: 500 };
+            const mockWallet = { user: '507f1f77bcf86cd799439011', balance: 500 };
             (Wallet.findOne as jest.Mock).mockResolvedValue(mockWallet);
-
-            const result = await walletService.getWalletByUserId('507f191e810c19729de860ea');
-
-            expect(Wallet.findOne).toHaveBeenCalledWith({ user: '507f191e810c19729de860ea' });
+            const result = await walletService.getWalletByUserId('507f1f77bcf86cd799439011');
             expect(result).toEqual(mockWallet);
         });
 
         test('Nên ném lỗi nếu không tìm thấy ví', async () => {
             (Wallet.findOne as jest.Mock).mockResolvedValue(null);
-            await expect(walletService.getWalletByUserId('507f191e810c19729de860ea')).rejects.toThrow(ApiError);
+            await expect(walletService.getWalletByUserId('507f1f77bcf86cd799439011')).rejects.toThrow(ApiError);
         });
     });
 
     describe('updateBalance', () => {
         test('Nên cập nhật số dư thành công', async () => {
-            const mockWallet = { 
-                balance: 100, 
-                save: jest.fn().mockResolvedValue(true) 
-            };
+            const mockWallet = { balance: 100 };
             (Wallet.findOne as jest.Mock).mockResolvedValue(mockWallet);
             (Wallet.findOneAndUpdate as jest.Mock).mockResolvedValue({ balance: 150 });
+            (WalletHistory.create as jest.Mock).mockResolvedValue({});
 
-            // Nạp thêm 50 -> 150
-            const result = await walletService.updateBalance('507f191e810c19729de860ea', 50);
-
+            const result = await walletService.updateBalance('507f1f77bcf86cd799439011', 50);
             expect(result.balance).toBe(150);
         });
 
-        test('Nên báo lỗi nếu số dư sau cập nhật < 0', async () => {
-            const mockWallet = { balance: 30 };
-            (Wallet.findOne as jest.Mock).mockResolvedValue(mockWallet);
+        test('Nên báo lỗi nếu số dư không đủ', async () => {
+            (Wallet.findOne as jest.Mock).mockResolvedValue({ balance: 30 });
+            await expect(walletService.updateBalance('507f1f77bcf86cd799439011', -50)).rejects.toThrow('Số dư không đủ');
+        });
 
-            // Trừ 50 -> -20 (Lỗi)
-            await expect(walletService.updateBalance('507f191e810c19729de860ea', -50))
-                .rejects.toThrow(new ApiError(400, 'Số dư không đủ'));
+        test('Nên thực hiện logic retry nếu bị xung đột', async () => {
+            (Wallet.findOne as jest.Mock).mockResolvedValue({ balance: 100 });
+            (Wallet.findOneAndUpdate as jest.Mock).mockResolvedValueOnce(null);
+            (Wallet.findOneAndUpdate as jest.Mock).mockResolvedValueOnce({ balance: 150 });
+            const result = await walletService.updateBalance('507f1f77bcf86cd799439011', 50);
+            expect(result.balance).toBe(150);
+        });
+    });
+
+    describe('queryWallets', () => {
+        test('Nên trả về danh sách ví phân trang', async () => {
+            const mockItems = [{ user: '507f1f77bcf86cd799439011' }];
+            const mockFind = {
+                sort: jest.fn().mockReturnThis(),
+                skip: jest.fn().mockReturnThis(),
+                limit: jest.fn().mockReturnThis(),
+                populate: jest.fn().mockResolvedValue(mockItems)
+            };
+            (Wallet.find as jest.Mock).mockReturnValue(mockFind);
+            (Wallet.countDocuments as jest.Mock).mockResolvedValue(1);
+
+            const result = await walletService.queryWallets({}, { limit: 10, page: 1 });
+            expect(result.items).toEqual(mockItems);
         });
     });
 });

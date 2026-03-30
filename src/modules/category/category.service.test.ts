@@ -41,7 +41,7 @@ describe('Category Service', () => {
         test('Nên lấy từ DB nếu không có cache và sau đó lưu vào cache', async () => {
             (cacheUtil.getCache as jest.Mock).mockResolvedValue(null);
             const mockItems = [{ name: 'Test' }];
-            (Category.find as any).mockReturnValue({
+            (Category.find as jest.Mock).mockReturnValue({
                 sort: jest.fn().mockReturnThis(),
                 skip: jest.fn().mockReturnThis(),
                 limit: jest.fn().mockResolvedValue(mockItems),
@@ -92,6 +92,12 @@ describe('Category Service', () => {
 
             expect(mockCategory.deleteOne).toHaveBeenCalled();
             expect(cacheUtil.deleteCacheByPattern).toHaveBeenCalledWith('categories_list');
+        });
+
+        test('Nên báo lỗi 404 nếu không tìm thấy danh mục để xóa', async () => {
+            (Category.findById as jest.Mock).mockResolvedValue(null);
+            await expect(categoryService.deleteCategoryById('invalid'))
+                .rejects.toThrow(new ApiError(404, 'Không tìm thấy danh mục'));
         });
     });
 });
